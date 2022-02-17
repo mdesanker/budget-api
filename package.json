@@ -1,0 +1,19 @@
+{
+  "name": "budget-api",
+  "version": "1.0.0",
+  "description": "API for budget tracking app",
+  "main": "app.ts",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mdesanker/budget-api.git"
+  },
+  "author": "Michael Desanker",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mdesanker/budget-api/issues"
+  },
+  "homepage": "https://github.com/mdesanker/budget-api#readme"
+}
