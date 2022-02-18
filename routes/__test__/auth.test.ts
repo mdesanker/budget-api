@@ -91,16 +91,26 @@ describe("POST /auth/login", () => {
     });
 
     expect(res.statusCode).toEqual(401);
-    expect(res.body.error[0].msg).toEqual("Invalid credentials");
+    expect(res.body.errors[0].msg).toEqual("Invalid credentials");
   });
 
-  it("return error for invalid credentials", async () => {
+  it("return error for wrong password", async () => {
     const res = await request(app).post("/auth/login").send({
       email: "michael@email.com",
       password: "drowssap",
     });
 
     expect(res.statusCode).toEqual(401);
-    expect(res.body.error[0].msg).toEqual("Invalid credentials");
+    expect(res.body.errors[0].msg).toEqual("Invalid credentials");
+  });
+
+  it("return error for account doesn't exist", async () => {
+    const res = await request(app).post("/auth/login").send({
+      email: "mark@email.com",
+      password: "wharrgarbl",
+    });
+
+    expect(res.statusCode).toEqual(401);
+    expect(res.body.errors[0].msg).toEqual("Invalid credentials");
   });
 });

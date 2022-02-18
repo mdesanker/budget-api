@@ -7,12 +7,13 @@ import User, { IUser } from "../models/User";
 
 const register = [
   // Validate and sanitize input
-  check("firstName", "First name is required").trim().notEmpty(),
-  check("lastName", "Last name is required").trim().notEmpty(),
+  check("firstName", "First name is required").trim().notEmpty().escape(),
+  check("lastName", "Last name is required").trim().notEmpty().escape(),
   check("email", "Email is required").trim().notEmpty().isEmail(),
   check("password", "Password is required")
     .isLength({ min: 6 })
-    .withMessage("Password must be at least 6 characters long"),
+    .withMessage("Password must be at least 6 characters long")
+    .escape(),
   check(
     "passwordConfirm",
     "Password confirmation field must have the same value as the password field"
@@ -75,4 +76,52 @@ const register = [
   },
 ];
 
-export default { register };
+const login = [
+  // Validate and sanitize input
+  check("email").escape(),
+  check("password").escape(),
+
+  // Process input
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
+
+    try {
+      // Check account exists
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        return res
+          .status(401)
+          .json({ errors: [{ msg: "Invalid credentials" }] });
+      }
+
+      // Check password
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) {
+        return res
+          .status(401)
+          .json({ errors: [{ msg: "Invalid credentials" }] });
+      }
+
+      // Generate token
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      const token = jwt.sign(payload, process.env.KEY as string, {
+        expiresIn: "6h",
+      });
+
+      res.json({ token });
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        res.status(500).send("Server error");
+      }
+    }
+  },
+];
+
+export default { register, login };

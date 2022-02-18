@@ -1,10 +1,10 @@
 import { Schema, model } from "mongoose";
 
 export interface IUser {
-  _id?: String;
+  _id?: string;
   name: Record<string, string>;
-  email: String;
-  password: String;
+  email: string;
+  password: string;
   date?: Date;
   income?: Record<string, any>[];
   housing?: Record<string, any>[];
