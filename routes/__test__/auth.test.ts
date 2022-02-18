@@ -2,12 +2,14 @@ import app from "./app";
 import request from "supertest";
 import initializeTestServer from "../../config/mongoTestConfig";
 import mongoose from "mongoose";
+import seedDB from "./seed";
 
 // GLOBAL VARIABLES
 
 // TEST SETUP
 beforeAll(async () => {
   await initializeTestServer();
+  await seedDB();
 });
 
 afterAll(() => {
@@ -16,36 +18,57 @@ afterAll(() => {
 
 // POST ROUTES
 describe("POST /auth/register", () => {
-  it("return new user", async () => {
-    const res = await request(app)
-      .post("/auth/register")
-      .send({
-        name: {
-          firstName: "Michael",
-          lastName: "TypeScript",
-        },
-        email: "michael@email.com",
-        password: "password",
-      });
+  it("return token for new user", async () => {
+    const res = await request(app).post("/auth/register").send({
+      firstName: "Michael",
+      lastName: "TypeScript",
+      email: "michael@email.com",
+      password: "password",
+      passwordConfirm: "password",
+    });
 
     expect(res.statusCode).toEqual(201);
-    expect(res.body.name.firstName).toEqual("Michael");
-    expect(res.body.name.lastName).toEqual("TypeScript");
+    expect(res.body).toHaveProperty("token");
+  });
+
+  it("return error for password mismatch", async () => {
+    const res = await request(app).post("/auth/register").send({
+      firstName: "Michael",
+      lastName: "TypeScript",
+      email: "michael@email.com",
+      password: "password",
+      passwordConfirm: "drowssap",
+    });
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body.errors[0].msg).toEqual(
+      "Password confirmation field must have the same value as the password field"
+    );
   });
 
   it("return error for missing field", async () => {
-    const res = await request(app)
-      .post("/auth/register")
-      .send({
-        name: {
-          firstName: "",
-          lastName: "TypeScript",
-        },
-        email: "michael@email.com",
-        password: "password",
-      });
+    const res = await request(app).post("/auth/register").send({
+      firstName: "",
+      lastName: "TypeScript",
+      email: "michael@email.com",
+      password: "password",
+      passwordConfirm: "password",
+    });
 
-    expect(res.statusCode).toEqual(422);
+    expect(res.statusCode).toEqual(400);
     expect(res.body.errors[0].msg).toEqual("First name is required");
+  });
+
+  it("return error for email already associated with account", async () => {
+    const res = await request(app).post("/auth/register").send({
+      firstName: "Mike",
+      lastName: "JavaScript",
+      email: "michael@email.com",
+      password: "password",
+      passwordConfirm: "password",
+    });
+
+    expect(res.statusCode).toEqual(409);
+    expect(res.body.errors[0].msg).toEqual("Email already in use");
   });
 });

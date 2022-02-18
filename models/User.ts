@@ -5,14 +5,14 @@ export interface IUser {
   name: Record<string, string>;
   email: String;
   password: String;
-  date: Date;
-  income: Record<string, any>[];
-  housing: Record<string, any>[];
-  food: Record<string, any>[];
-  utilities: Record<string, any>[];
-  healthcare: Record<string, any>[];
-  loans: Record<string, any>[];
-  subscriptions: Record<string, any>[];
+  date?: Date;
+  income?: Record<string, any>[];
+  housing?: Record<string, any>[];
+  food?: Record<string, any>[];
+  utilities?: Record<string, any>[];
+  healthcare?: Record<string, any>[];
+  loans?: Record<string, any>[];
+  subscriptions?: Record<string, any>[];
 }
 
 const UserSchema = new Schema<IUser>({
