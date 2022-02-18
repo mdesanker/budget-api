@@ -3,6 +3,7 @@ import request from "supertest";
 import initializeTestServer from "../../config/mongoTestConfig";
 import mongoose from "mongoose";
 import seedDB from "./seed";
+import faker from "@faker-js/faker";
 
 // GLOBAL VARIABLES
 let janeToken: string;
@@ -89,7 +90,7 @@ describe("POST /expense/add", () => {
     const res = await request(app)
       .post("/expense/add")
       .send({
-        date: Date.now(),
+        date: faker.date.past(),
         income: [{ name: "Job2", amount: 9500 }],
         housing: [{ name: "Apartment", amount: 1200 }],
         food: [
@@ -107,14 +108,16 @@ describe("POST /expense/add", () => {
       })
       .set("x-auth-token", janeToken);
 
-    expect(res.statusCode).toEqual(200);
+    expect(res.statusCode).toEqual(201);
+    expect(res.body.user).toEqual(janeId);
+    expect(res.body).toHaveProperty("housing");
   });
 
   it("return error if field missing", async () => {
     const res = await request(app)
       .post("/expense/add")
       .send({
-        date: Date.now(),
+        date: faker.date.past(),
         income: [{ name: "Job3", amount: 9500 }],
         housing: [{ name: "", amount: 1200 }],
         food: [],
@@ -125,7 +128,9 @@ describe("POST /expense/add", () => {
       })
       .set("x-auth-token", janeToken);
 
-    expect(res.statusCode).toEqual(400);
-    expect(res.body.errors[0].msg).toEqual("Missing field");
+    expect(res.statusCode).toEqual(422);
+    expect(res.body.errors[0].msg).toEqual(
+      "Each housing source requires a name"
+    );
   });
 });

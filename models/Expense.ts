@@ -3,7 +3,7 @@ import { Schema, Types, model } from "mongoose";
 export interface IExpense {
   _id?: string;
   user: Types.ObjectId;
-  date: Date;
+  date?: Date;
   income: { name: string; amount: number }[];
   housing: { name: string; amount: number }[];
   food: { name: string; amount: number }[];
