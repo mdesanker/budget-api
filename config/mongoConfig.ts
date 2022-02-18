@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { connect } from "mongoose";
 
 const mongoDB =
