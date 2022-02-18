@@ -49,6 +49,7 @@ describe("GET /user/:id", () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body._id).toEqual(janeId);
     expect(res.body.name.firstName).toEqual("Jane");
+    expect(res.body).not.toHaveProperty("password");
   });
 
   it("return error for invalid id", async () => {
