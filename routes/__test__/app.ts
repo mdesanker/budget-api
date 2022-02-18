@@ -5,4 +5,4 @@ const app = express();
 
 app.use("/auth", authRouter);
 
-export default app;
+export = app;
