@@ -5,12 +5,13 @@ const users: any[] = [];
 // USERS
 const generateJane = () => {
   const user = new User<IUser>({
+    _id: "620f8197b39ee93778ce738b",
     name: {
       firstName: "Jane",
       lastName: "Smith",
     },
     email: "jane@gmail.com",
-    password: "password",
+    password: "$2a$10$dexhl0xuphcSioluvPGFk.FsLMe3uhhy/AjKCYeeBnaXRDfXrumZ.", // "password" hashed
   });
 
   users.push(user);

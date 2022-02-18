@@ -4,8 +4,6 @@ import initializeTestServer from "../../config/mongoTestConfig";
 import mongoose from "mongoose";
 import seedDB from "./seed";
 
-// GLOBAL VARIABLES
-
 // TEST SETUP
 beforeAll(async () => {
   await initializeTestServer();

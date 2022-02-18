@@ -3,6 +3,6 @@ import auth from "../../middleware/authMiddleware";
 import userController from "../../controllers/user";
 const user = Router();
 
-user.get("/", userController.user);
+user.get("/detail", auth, userController.user);
 
 export = user;
