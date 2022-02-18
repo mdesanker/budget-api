@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-const all = async (req: Request, res: Response, next: NextFunction) => {
+const user = async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Check id is valid
     res.send("GET expense test");
@@ -11,4 +11,4 @@ const all = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export default { all };
+export default { user };
