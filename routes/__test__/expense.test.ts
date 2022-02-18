@@ -82,3 +82,50 @@ describe("GET /expense/:id", () => {
     expect(res.body.errors[0].msg).toEqual("Invalid credentials");
   });
 });
+
+// POST ROUTES
+describe("POST /expense/add", () => {
+  it("return new expense", async () => {
+    const res = await request(app)
+      .post("/expense/add")
+      .send({
+        date: Date.now(),
+        income: [{ name: "Job2", amount: 9500 }],
+        housing: [{ name: "Apartment", amount: 1200 }],
+        food: [
+          { name: "Groceries", amount: 700 },
+          { name: "Dining out", amount: 350 },
+        ],
+        utilities: [
+          { name: "Electricity", amount: 800 },
+          { name: "Water", amount: 30 },
+          { name: "Gas", amount: 30 },
+        ],
+        healthcare: [],
+        loans: [],
+        subscriptions: [],
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(200);
+  });
+
+  it("return error if field missing", async () => {
+    const res = await request(app)
+      .post("/expense/add")
+      .send({
+        date: Date.now(),
+        income: [{ name: "Job3", amount: 9500 }],
+        housing: [{ name: "", amount: 1200 }],
+        food: [],
+        utilities: [],
+        healthcare: [],
+        loans: [],
+        subscriptions: [],
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body.errors[0].msg).toEqual("Missing field");
+  });
+});
