@@ -1,6 +1,6 @@
 import app from "./app";
 import request from "supertest";
-import initializeTestServer from "../../config/mongoTestConfig";
+import initializeTestServer from "../../utils/mongoTestConfig";
 import mongoose from "mongoose";
 import seedDB from "./seed";
 

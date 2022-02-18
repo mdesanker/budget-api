@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
-import connectDB from "./config/mongoConfig";
+import connectDB from "./utils/mongoConfig";
 
 import authRouter from "./routes/api/auth";
 import userRouter from "./routes/api/user";
