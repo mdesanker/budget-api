@@ -38,8 +38,9 @@ const generateJohn = () => {
 // EXPENSES
 const generateJaneExpenses = () => {
   const expense = new Expense<IExpense>({
+    _id: "620ff22cc1e1d3cda631c3de",
     user: new Types.ObjectId("620f8197b39ee93778ce738b"), // Jane
-    date: faker.date.recent(),
+    date: faker.date.past(),
     income: [{ name: "Job1", amount: 5000 }],
     housing: [{ name: "Apartment", amount: 700 }],
     food: [
@@ -62,12 +63,37 @@ const generateJaneExpenses = () => {
   expenses.push(expense);
 };
 
+const generateJohnExpenses = () => {
+  const expense = new Expense<IExpense>({
+    _id: "620ff22cc1e1d3cda631c3df",
+    user: new Types.ObjectId("620f8197b39ee93778ce738c"), // John
+    date: faker.date.past(),
+    income: [{ name: "PNC Bank", amount: 3500 }],
+    housing: [{ name: "Apartment", amount: 600 }],
+    food: [
+      { name: "Groceries", amount: 400 },
+      { name: "Dining out", amount: 50 },
+    ],
+    utilities: [
+      { name: "Electricity", amount: 800 },
+      { name: "Water", amount: 30 },
+      { name: "Gas", amount: 30 },
+    ],
+    healthcare: [],
+    loans: [],
+    subscriptions: [{ name: "Amazon", amount: 120 }],
+  });
+
+  expenses.push(expense);
+};
+
 // SEED DB
 const seedDB = async () => {
   generateJane();
   generateJohn();
 
   generateJaneExpenses();
+  generateJohnExpenses();
 
   for (let user of users) {
     try {
@@ -86,7 +112,7 @@ const seedDB = async () => {
   }
 
   // console.log(users);
-  // console.log(expenses);
+  console.log(expenses);
   return;
 };
 

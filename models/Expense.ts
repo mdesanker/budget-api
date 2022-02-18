@@ -4,13 +4,13 @@ export interface IExpense {
   _id?: string;
   user: Types.ObjectId;
   date: Date;
-  income?: { name: string; amount: number }[];
-  housing?: { name: string; amount: number }[];
-  food?: { name: string; amount: number }[];
-  utilities?: { name: string; amount: number }[];
-  healthcare?: { name: string; amount: number }[];
-  loans?: { name: string; amount: number }[];
-  subscriptions?: { name: string; amount: number }[];
+  income: { name: string; amount: number }[];
+  housing: { name: string; amount: number }[];
+  food: { name: string; amount: number }[];
+  utilities: { name: string; amount: number }[];
+  healthcare: { name: string; amount: number }[];
+  loans: { name: string; amount: number }[];
+  subscriptions: { name: string; amount: number }[];
 }
 
 const ExpenseSchema = new Schema<IExpense>({

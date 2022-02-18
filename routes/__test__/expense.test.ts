@@ -10,6 +10,9 @@ let johnToken: string;
 const janeId: string = "620f8197b39ee93778ce738b";
 const johnId: string = "620f8197b39ee93778ce738c";
 const invalidUserId: string = "620f8197b39ee93778c00000";
+const janeExpenseId: string = "620ff22cc1e1d3cda631c3de";
+const johnExpenseId: string = "620ff22cc1e1d3cda631c3df";
+const invalidExpenseId: string = "620ff22cc1e1d3cda6300000";
 
 // TEST SETUP
 beforeAll(async () => {
@@ -47,5 +50,35 @@ describe("GET /expense/user", () => {
     expect(res.statusCode).toEqual(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toBeGreaterThan(0);
+  });
+});
+
+describe("GET /expense/:id", () => {
+  it("return specific expense", async () => {
+    const res = await request(app)
+      .get(`/expense/${janeExpenseId}`)
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.user._id).toEqual(janeId);
+    expect(res.body).toHaveProperty("income");
+  });
+
+  it("return error for invalid expense id", async () => {
+    const res = await request(app)
+      .get(`/expense/${invalidExpenseId}`)
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(404);
+    expect(res.body.errors[0].msg).toEqual("Invalid expense id");
+  });
+
+  it("return error for not user's expense", async () => {
+    const res = await request(app)
+      .get(`/expense/${johnExpenseId}`)
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(401);
+    expect(res.body.errors[0].msg).toEqual("Invalid credentials");
   });
 });
