@@ -4,6 +4,7 @@ import initializeTestServer from "../../config/mongoTestConfig";
 import mongoose from "mongoose";
 import seedDB from "./seed";
 import faker from "@faker-js/faker";
+import { DateTime } from "luxon";
 
 // GLOBAL VARIABLES
 let janeToken: string;
@@ -90,7 +91,7 @@ describe("POST /expense/add", () => {
     const res = await request(app)
       .post("/expense/add")
       .send({
-        date: faker.date.past(),
+        date: DateTime.now(),
         income: [{ name: "Job2", amount: 9500 }],
         housing: [{ name: "Apartment", amount: 1200 }],
         food: [
@@ -117,7 +118,7 @@ describe("POST /expense/add", () => {
     const res = await request(app)
       .post("/expense/add")
       .send({
-        date: faker.date.past(),
+        date: DateTime.now(),
         income: [{ name: "Job3", amount: 9500 }],
         housing: [{ name: "", amount: 1200 }],
         food: [],

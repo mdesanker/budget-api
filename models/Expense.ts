@@ -1,4 +1,5 @@
 import { Schema, Types, model } from "mongoose";
+import { DateTime } from "luxon";
 
 export interface IExpense {
   _id?: string;
@@ -15,7 +16,7 @@ export interface IExpense {
 
 const ExpenseSchema = new Schema<IExpense>({
   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  date: { type: Date, default: Date.now },
+  date: { type: Date, default: DateTime.now },
   income: [
     {
       name: { type: String },

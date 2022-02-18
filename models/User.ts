@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { DateTime } from "luxon";
 
 export interface IUser {
   _id?: string;
@@ -15,7 +16,7 @@ const UserSchema = new Schema<IUser>({
   },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minlength: 6 },
-  date: { type: Date, default: Date.now },
+  date: { type: Date, default: DateTime.now },
 });
 
 export default model("User", UserSchema);
