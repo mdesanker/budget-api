@@ -112,7 +112,7 @@ const seedDB = async () => {
   }
 
   // console.log(users);
-  console.log(expenses);
+  // console.log(expenses);
   return;
 };
 
