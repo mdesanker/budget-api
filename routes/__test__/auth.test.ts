@@ -72,3 +72,35 @@ describe("POST /auth/register", () => {
     expect(res.body.errors[0].msg).toEqual("Email already in use");
   });
 });
+
+describe("POST /auth/login", () => {
+  it("return token for logged in user", async () => {
+    const res = await request(app).post("/auth/login").send({
+      email: "michael@email.com",
+      password: "password",
+    });
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toHaveProperty("token");
+  });
+
+  it("return error for missing field", async () => {
+    const res = await request(app).post("/auth/login").send({
+      email: "",
+      password: "password",
+    });
+
+    expect(res.statusCode).toEqual(401);
+    expect(res.body.error[0].msg).toEqual("Invalid credentials");
+  });
+
+  it("return error for invalid credentials", async () => {
+    const res = await request(app).post("/auth/login").send({
+      email: "michael@email.com",
+      password: "drowssap",
+    });
+
+    expect(res.statusCode).toEqual(401);
+    expect(res.body.error[0].msg).toEqual("Invalid credentials");
+  });
+});
