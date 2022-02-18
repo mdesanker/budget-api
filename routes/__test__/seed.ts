@@ -17,9 +17,24 @@ const generateJane = () => {
   users.push(user);
 };
 
+const generateJohn = () => {
+  const user = new User<IUser>({
+    _id: "620f8197b39ee93778ce738c",
+    name: {
+      firstName: "John",
+      lastName: "Doe",
+    },
+    email: "john@gmail.com",
+    password: "$2a$10$dexhl0xuphcSioluvPGFk.FsLMe3uhhy/AjKCYeeBnaXRDfXrumZ.", // "password" hashed
+  });
+
+  users.push(user);
+};
+
 // SEED DB
 const seedDB = async () => {
   generateJane();
+  generateJohn();
 
   for (let user of users) {
     try {
