@@ -38,7 +38,7 @@ describe("POST /auth/register", () => {
       passwordConfirm: "drowssap",
     });
 
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(422);
     expect(res.body.errors[0].msg).toEqual(
       "Password confirmation field must have the same value as the password field"
     );
@@ -53,7 +53,7 @@ describe("POST /auth/register", () => {
       passwordConfirm: "password",
     });
 
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(422);
     expect(res.body.errors[0].msg).toEqual("First name is required");
   });
 

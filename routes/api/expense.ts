@@ -1,7 +1,7 @@
 import { Router } from "express";
 import auth from "../../middleware/authMiddleware";
 import expenseController from "../../controllers/expense";
-import validator from "../../utils/validator";
+import validator from "../../middleware/validator";
 const expense = Router();
 
 expense.get("/user", auth, expenseController.user);
