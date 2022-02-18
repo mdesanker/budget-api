@@ -1,6 +1,6 @@
 import { Schema, Types, model } from "mongoose";
 
-export interface IExpenses {
+export interface IExpense {
   _id?: string;
   user: Types.ObjectId;
   date: Date;
@@ -13,7 +13,7 @@ export interface IExpenses {
   subscriptions?: { name: string; amount: number }[];
 }
 
-const ExpensesSchema = new Schema<IExpenses>({
+const ExpenseSchema = new Schema<IExpense>({
   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   date: { type: Date, default: Date.now },
   income: [
@@ -60,4 +60,4 @@ const ExpensesSchema = new Schema<IExpenses>({
   ],
 });
 
-export default model("Expenses", ExpensesSchema);
+export default model("Expense", ExpenseSchema);

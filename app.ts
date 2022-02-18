@@ -7,6 +7,7 @@ import connectDB from "./config/mongoConfig";
 
 import authRouter from "./routes/api/auth";
 import userRouter from "./routes/api/user";
+import expenseRouter from "./routes/api/expense";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/expense", expenseRouter);
 
 const PORT = (process.env.PORT as string) || (process.env.DEV_PORT as string);
 
