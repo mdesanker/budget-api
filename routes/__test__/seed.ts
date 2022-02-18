@@ -1,6 +1,10 @@
+import faker from "@faker-js/faker";
+import { Types } from "mongoose";
 import User, { IUser } from "../../models/User";
+import Expense, { IExpense } from "../../models/Expense";
 
 const users: any[] = [];
+const expenses: any[] = [];
 
 // USERS
 const generateJane = () => {
@@ -31,10 +35,39 @@ const generateJohn = () => {
   users.push(user);
 };
 
+// EXPENSES
+const generateJaneExpenses = () => {
+  const expense = new Expense<IExpense>({
+    user: new Types.ObjectId("620f8197b39ee93778ce738b"), // Jane
+    date: faker.date.recent(),
+    income: [{ name: "Job1", amount: 5000 }],
+    housing: [{ name: "Apartment", amount: 700 }],
+    food: [
+      { name: "Groceries", amount: 400 },
+      { name: "Dining out", amount: 200 },
+    ],
+    utilities: [
+      { name: "Electricity", amount: 130 },
+      { name: "Water", amount: 50 },
+      { name: "Gas", amount: 35 },
+    ],
+    healthcare: [{ name: "HDHP", amount: 15 }],
+    loans: [{ name: "Car", amount: 300 }],
+    subscriptions: [
+      { name: "Amazon", amount: 120 },
+      { name: "Spotify", amount: 10 },
+    ],
+  });
+
+  expenses.push(expense);
+};
+
 // SEED DB
 const seedDB = async () => {
   generateJane();
   generateJohn();
+
+  generateJaneExpenses();
 
   for (let user of users) {
     try {
@@ -44,7 +77,16 @@ const seedDB = async () => {
     }
   }
 
+  for (let expense of expenses) {
+    try {
+      await expense.save();
+    } catch (err) {
+      err;
+    }
+  }
+
   // console.log(users);
+  console.log(expenses);
   return;
 };
 
