@@ -41,3 +41,20 @@ describe("GET /user/detail", () => {
     expect(res.body).not.toHaveProperty("password");
   });
 });
+
+describe("GET /user/:id", () => {
+  it("return details for user", async () => {
+    const res = await request(app).get(`/user/${janeId}`);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body._id).toEqual(janeId);
+    expect(res.body.name.firstName).toEqual("Jane");
+  });
+
+  it("return error for invalid id", async () => {
+    const res = await request(app).get(`/user/${invalidUserId}`);
+
+    expect(res.statusCode).toEqual(404);
+    expect(res.body.errors[0].msg).toEqual("Invalid credentials");
+  });
+});
