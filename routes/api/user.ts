@@ -5,5 +5,6 @@ const user = Router();
 
 user.get("/detail", auth, userController.current);
 user.get("/:id", userController.user);
+user.delete("/:id", auth, userController.remove);
 
 export = user;
