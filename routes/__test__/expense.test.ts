@@ -135,3 +135,85 @@ describe("POST /expense/add", () => {
     );
   });
 });
+
+// PUT ROUTES
+describe("PUT /expense/:id", () => {
+  it("return updated expenses", async () => {
+    const res = await request(app)
+      .put(`/expense/${janeExpenseId}`)
+      .send({
+        date: DateTime.now(),
+        income: [{ name: "Self-Employed", amount: 500 }],
+        housing: [{ name: "Parent's basement", amount: 100 }],
+        food: [{ name: "Chicken tendies", amount: 450 }],
+        utilities: [],
+        healthcare: [{ name: "Mountain Dew", amount: 300 }],
+        loans: [],
+        subscriptions: [],
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body._id).toEqual(janeExpenseId);
+    expect(res.body).toHaveProperty("income");
+    expect(res.body.income[0].name).toEqual("Self-Employed");
+  });
+  it("return error if not user's expense", async () => {
+    const res = await request(app)
+      .put(`/expense/${johnExpenseId}`)
+      .send({
+        date: DateTime.now(),
+        income: [{ name: "Self-Employed", amount: 500 }],
+        housing: [{ name: "Parent's basement", amount: 100 }],
+        food: [{ name: "Chicken tendies", amount: 450 }],
+        utilities: [],
+        healthcare: [{ name: "Mountain Dew", amount: 300 }],
+        loans: [],
+        subscriptions: [],
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(401);
+    expect(res.body.errors[0].msg).toEqual("Invalid credentials");
+  });
+
+  it("return error for missing field", async () => {
+    const res = await request(app)
+      .put(`/expense/${janeExpenseId}`)
+      .send({
+        date: DateTime.now(),
+        income: [{ name: "Self-Employed", amount: 500 }],
+        housing: [{ name: "Parent's basement", amount: 100 }],
+        food: [{ name: "Chicken tendies" }],
+        utilities: [],
+        healthcare: [{ name: "Mountain Dew", amount: 300 }],
+        loans: [],
+        subscriptions: [],
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(422);
+    expect(res.body.errors[0].msg).toEqual(
+      "Each food source requires an amount"
+    );
+  });
+
+  it("return error for invalid expense id", async () => {
+    const res = await request(app)
+      .put(`/expense/${invalidExpenseId}`)
+      .send({
+        date: DateTime.now(),
+        income: [{ name: "Self-Employed", amount: 500 }],
+        housing: [{ name: "Parent's basement", amount: 100 }],
+        food: [{ name: "Chicken tendies", amount: 450 }],
+        utilities: [],
+        healthcare: [{ name: "Mountain Dew", amount: 300 }],
+        loans: [],
+        subscriptions: [],
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(404);
+    expect(res.body.errors[0].msg).toEqual("Invalid expense id");
+  });
+});
