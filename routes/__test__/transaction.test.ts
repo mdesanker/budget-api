@@ -191,3 +191,71 @@ describe("POST /transaction/add", () => {
     expect(res.body.errors[0].msg).toEqual("Description is required");
   });
 });
+
+// PUT ROUTES
+describe("PUT /transaction/edit/:id", () => {
+  it("return edited transaction", async () => {
+    const res = await request(app)
+      .put(`/transaction/edit/${janeTransactionId}`)
+      .send({
+        description: "Daycare",
+        merchant: "City Montessori",
+        amount: 325,
+        category: "Professional Services",
+        date: new Date(2021, 9, 23),
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body._id).toEqual(janeTransactionId);
+    expect(res.body.description).toEqual("Daycare");
+  });
+
+  it("return error for missing field", async () => {
+    const res = await request(app)
+      .put(`/transaction/edit/${janeTransactionId}`)
+      .send({
+        description: "",
+        merchant: "Best Buy",
+        amount: 325,
+        category: "Shopping",
+        date: new Date(2022, 1, 15),
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(422);
+    expect(res.body.errors[0].msg).toEqual("Description is required");
+  });
+
+  it("return error for not owner of transaction", async () => {
+    const res = await request(app)
+      .put(`/transaction/edit/${johnTransactionId}`)
+      .send({
+        description: "Hijack",
+        merchant: "Jane Inc",
+        amount: 5000,
+        category: "Personal",
+        date: new Date(2022, 2, 15),
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(401);
+    expect(res.body.errors[0].msg).toEqual("Invalid credentials");
+  });
+
+  it("return error for invalid transaction id", async () => {
+    const res = await request(app)
+      .put(`/transaction/edit/${invalidTransactionId}`)
+      .send({
+        description: "InVaLiD iD",
+        merchant: "Uh Oh Inc",
+        amount: 666,
+        category: "Personal",
+        date: new Date(2022, 2, 15),
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(404);
+    expect(res.body.errors[0].msg).toEqual("Invalid transaction id");
+  });
+});
