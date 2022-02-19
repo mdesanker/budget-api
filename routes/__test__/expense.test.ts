@@ -158,6 +158,7 @@ describe("PUT /expense/:id", () => {
     expect(res.body).toHaveProperty("income");
     expect(res.body.income[0].name).toEqual("Self-Employed");
   });
+
   it("return error if not user's expense", async () => {
     const res = await request(app)
       .put(`/expense/${johnExpenseId}`)
