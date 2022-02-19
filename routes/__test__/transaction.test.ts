@@ -63,7 +63,7 @@ describe("GET /transaction/:id", () => {
 
     expect(res.statusCode).toEqual(200);
     expect(res.body._id).toEqual(janeTransactionId);
-    expect(res.body.user).toEqual(janeId);
+    expect(res.body.user._id).toEqual(janeId);
     expect(res.body).toHaveProperty("description");
   });
 

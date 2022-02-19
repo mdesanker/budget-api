@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Transaction from "../models/Transaction";
+import User from "../models/User";
 
 const allUserTransactions = async (
   req: Request,
@@ -9,7 +10,6 @@ const allUserTransactions = async (
   try {
     const transations = await Transaction.find({ user: req.user.id });
 
-    console.log(transations);
     res.json(transations);
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -18,4 +18,43 @@ const allUserTransactions = async (
   }
 };
 
-export default { allUserTransactions };
+const getTransaction = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  try {
+    // Check id is valid
+    const transaction = await Transaction.findById(id).populate(
+      "user",
+      "-password"
+    );
+
+    if (!transaction) {
+      return res
+        .status(404)
+        .json({ errors: [{ msg: "Invalid transaction id" }] });
+    }
+
+    // Check user is owner
+    const user = await User.findById(req.user.id);
+
+    const isOwner = user?.id === transaction.user.id;
+
+    if (!isOwner) {
+      return res.status(401).json({ errors: [{ msg: "Invalid credentials" }] });
+    }
+
+    // Return transaction
+    console.log(transaction);
+    res.json(transaction);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      res.status(500).send("Server error");
+    }
+  }
+};
+
+export default { allUserTransactions, getTransaction };
