@@ -23,5 +23,6 @@ transaction.put(
   validator.validateTransaction,
   transactionController.editTransaction
 );
+transaction.delete("/:id", auth, transactionController.deleteTransaction);
 
 export = transaction;
