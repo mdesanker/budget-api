@@ -259,3 +259,33 @@ describe("PUT /transaction/edit/:id", () => {
     expect(res.body.errors[0].msg).toEqual("Invalid transaction id");
   });
 });
+
+// DELETE ROUTES
+describe("DELETE /transaction/:id", () => {
+  it("return confirmation of successful delete", async () => {
+    const res = await request(app)
+      .delete(`/transaction/${janeTransactionId}`)
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.msg).toEqual("Transaction deleted");
+  });
+
+  it("return error for invalid transaction id", async () => {
+    const res = await request(app)
+      .delete(`/transaction/${invalidTransactionId}`)
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(404);
+    expect(res.body.errors[0].msg).toEqual("Invalid transaction id");
+  });
+
+  it("return error for not user's transaction", async () => {
+    const res = await request(app)
+      .delete(`/transaction/${johnTransactionId}`)
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(401);
+    expect(res.body.errors[0].msg).toEqual("Invalid credentials");
+  });
+});
