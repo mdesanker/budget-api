@@ -218,3 +218,39 @@ describe("PUT /expense/:id", () => {
     expect(res.body.errors[0].msg).toEqual("Invalid expense id");
   });
 });
+
+// DELETE ROUTES
+describe("DELETE /expense/:id", () => {
+  it("return error for invalid id", async () => {
+    const res = await request(app)
+      .delete(`/expense/${invalidExpenseId}`)
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(404);
+    expect(res.body.errors[0].msg).toEqual("Invalid expense id");
+  });
+
+  it("return error for not user's expense", async () => {
+    const res = await request(app)
+      .delete(`/expense/${johnExpenseId}`)
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(401);
+    expect(res.body.errors[0].msg).toEqual("Invalid credentials");
+  });
+
+  it("return confirmation expense deleted", async () => {
+    const res = await request(app)
+      .delete(`/expense/${janeExpenseId}`)
+      .set("x-auth-token", janeToken);
+
+    const check = await request(app)
+      .get(`/expense/${janeExpenseId}`)
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.msg).toEqual("Expense deleted");
+    expect(check.statusCode).toEqual(404);
+    expect(check.body.errors[0].msg).toEqual("Invalid expense id");
+  });
+});
