@@ -107,4 +107,33 @@ const validateExpense = [
   },
 ];
 
-export default { registerUser, loginUser, validateExpense };
+const validateTransaction = [
+  // Validate and sanitize input
+  check("description", "Description is required").trim().notEmpty(),
+  check("merchant", "Merchant is required").trim().notEmpty(),
+  check("amount", "Amount is required")
+    .trim()
+    .notEmpty()
+    .isNumeric()
+    .withMessage("Amount must be a number"),
+  check("category", "Category is required").trim().notEmpty(),
+  check("date").isISO8601(),
+
+  // Error handling
+  (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
+    next();
+  },
+];
+
+export default {
+  registerUser,
+  loginUser,
+  validateExpense,
+  validateTransaction,
+};

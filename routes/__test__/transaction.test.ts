@@ -153,19 +153,19 @@ describe("POST /transaction/add", () => {
       })
       .set("x-auth-token", janeToken);
 
-    expect(res.statusCode).toEqual(200);
-    expect(res.body.user._id).toEqual(janeId);
+    expect(res.statusCode).toEqual(201);
+    expect(res.body.user).toEqual(janeId);
     expect(res.body).toHaveProperty("description");
     expect(res.body.amount).toEqual(215);
   });
 
-  it("return new string submitted for amount", async () => {
+  it("return error for string submitted for amount", async () => {
     const res = await request(app)
       .post("/transaction/add")
       .send({
         description: "Babysitting",
         merchant: "Julia",
-        amount: "215",
+        amount: "a215",
         category: "Professional Services",
         date: new Date(2021, 9, 15),
       })

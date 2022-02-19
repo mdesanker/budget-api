@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
+import { Types } from "mongoose";
 import { DateTime } from "luxon";
-import Transaction from "../models/Transaction";
+import Transaction, { ITransaction } from "../models/Transaction";
 import User from "../models/User";
 
 const allUserTransactions = async (
@@ -9,11 +10,11 @@ const allUserTransactions = async (
   next: NextFunction
 ) => {
   try {
-    const transations = await Transaction.find({ user: req.user.id }).sort({
+    const transactions = await Transaction.find({ user: req.user.id }).sort({
       date: "desc",
     });
 
-    res.json(transations);
+    res.json(transactions);
   } catch (err: unknown) {
     if (err instanceof Error) {
       res.status(500).send("Server error");
@@ -75,7 +76,7 @@ const getUserTransactionsTimePeriod = async (
   try {
     const now: Date = new Date();
 
-    const transations = await Transaction.find({
+    const transactions = await Transaction.find({
       user: req.user.id,
       date: {
         $gte: new Date(now.getTime() - 1000 * 60 * 60 * 24 * parseInt(days)),
@@ -83,7 +84,35 @@ const getUserTransactionsTimePeriod = async (
       },
     }).sort({ date: "desc" });
 
-    res.json(transations);
+    res.json(transactions);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      res.status(500).send("Server error");
+    }
+  }
+};
+
+const addTransaction = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { description, merchant, amount, category, date } = req.body;
+
+    // Create new transaction
+    const transaction = new Transaction<ITransaction>({
+      user: new Types.ObjectId(req.user.id),
+      description,
+      merchant,
+      amount,
+      category,
+      date,
+    });
+
+    await transaction.save();
+
+    res.status(201).json(transaction);
   } catch (err: unknown) {
     if (err instanceof Error) {
       res.status(500).send("Server error");
@@ -95,4 +124,5 @@ export default {
   allUserTransactions,
   getTransaction,
   getUserTransactionsTimePeriod,
+  addTransaction,
 };
