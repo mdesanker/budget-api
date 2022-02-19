@@ -52,6 +52,7 @@ describe("GET /expense/user", () => {
     expect(res.statusCode).toEqual(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toBeGreaterThan(0);
+    expect(res.body[0].user).not.toHaveProperty("password");
   });
 });
 
@@ -64,6 +65,7 @@ describe("GET /expense/:id", () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body.user._id).toEqual(janeId);
     expect(res.body).toHaveProperty("income");
+    expect(res.body.user).not.toHaveProperty("password");
   });
 
   it("return error for invalid expense id", async () => {
@@ -110,8 +112,9 @@ describe("POST /expense/add", () => {
       .set("x-auth-token", janeToken);
 
     expect(res.statusCode).toEqual(201);
-    expect(res.body.user).toEqual(janeId);
+    expect(res.body.user._id).toEqual(janeId);
     expect(res.body).toHaveProperty("housing");
+    expect(res.body.user).not.toHaveProperty("password");
   });
 
   it("return error if field missing", async () => {
@@ -157,6 +160,8 @@ describe("PUT /expense/:id", () => {
     expect(res.body._id).toEqual(janeExpenseId);
     expect(res.body).toHaveProperty("income");
     expect(res.body.income[0].name).toEqual("Self-Employed");
+    expect(res.body.user._id).toEqual(janeId);
+    expect(res.body.user).not.toHaveProperty("password");
   });
 
   it("return error if not user's expense", async () => {

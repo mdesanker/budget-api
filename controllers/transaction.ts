@@ -133,10 +133,7 @@ const editTransaction = async (
 
   try {
     // Check transaction id valid
-    const transaction = await Transaction.findById(id).populate(
-      "user",
-      "-password"
-    );
+    const transaction = await Transaction.findById(id).populate("user");
 
     if (!transaction) {
       return res

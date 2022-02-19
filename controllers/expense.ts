@@ -9,7 +9,7 @@ const getUserExpenses = async (
   next: NextFunction
 ) => {
   try {
-    const expenses = await Expense.find({ user: req.user.id });
+    const expenses = await Expense.find({ user: req.user.id }).populate("user");
 
     res.json(expenses);
   } catch (err: unknown) {
@@ -24,7 +24,7 @@ const getExpense = async (req: Request, res: Response, next: NextFunction) => {
 
   try {
     // Check id valid
-    const expense = await Expense.findById(id).populate("user", "-password");
+    const expense = await Expense.findById(id).populate("user");
 
     if (!expense) {
       return res.status(404).json({ errors: [{ msg: "Invalid expense id" }] });
@@ -76,6 +76,9 @@ const addExpense = async (req: Request, res: Response, next: NextFunction) => {
 
     await expense.save();
 
+    await Expense.populate(expense, { path: "user" });
+
+    console.log(expense);
     res.status(201).json(expense);
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -104,7 +107,7 @@ const updateExpense = async (
 
   try {
     // Check id valid
-    const expense = await Expense.findById(id).populate("user", "-password");
+    const expense = await Expense.findById(id).populate("user");
 
     if (!expense) {
       return res.status(404).json({ errors: [{ msg: "Invalid expense id" }] });
@@ -135,7 +138,7 @@ const updateExpense = async (
 
     const update = await Expense.findByIdAndUpdate(id, updatedExpense, {
       new: true,
-    });
+    }).populate("user");
 
     res.status(200).json(update);
   } catch (err: unknown) {

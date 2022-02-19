@@ -8,7 +8,7 @@ const getCurrentUser = async (
 ) => {
   try {
     // Get user
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user.id);
 
     res.json(user);
   } catch (err: unknown) {
@@ -23,7 +23,7 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
 
   try {
     // Check id valid
-    const user = await User.findById(id).select("-password");
+    const user = await User.findById(id);
 
     if (!user) {
       return res.status(404).json({ errors: [{ msg: "Invalid credentials" }] });
