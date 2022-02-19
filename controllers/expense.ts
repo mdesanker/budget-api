@@ -141,4 +141,39 @@ const updateExpense = async (
   }
 };
 
-export default { user, expense, add, updateExpense };
+const deleteExpense = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  try {
+    // Check id valid
+    const expense = await Expense.findById(id).populate("user", "-password");
+
+    if (!expense) {
+      return res.status(404).json({ errors: [{ msg: "Invalid expense id" }] });
+    }
+
+    // Check user is owner
+    const user = await User.findById(req.user.id);
+
+    const isOwner = user?.id === expense.user.id;
+
+    if (!isOwner) {
+      return res.status(401).json({ errors: [{ msg: "Invalid credentials" }] });
+    }
+
+    // Delete expense
+    await Expense.findByIdAndRemove(id);
+
+    res.json({ msg: "Expense deleted" });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      res.status(500).send("Server error");
+    }
+  }
+};
+
+export default { user, expense, add, updateExpense, deleteExpense };

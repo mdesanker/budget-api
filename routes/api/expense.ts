@@ -13,5 +13,6 @@ expense.put(
   validator.validateExpense,
   expenseController.updateExpense
 );
+expense.delete("/:id", auth, expenseController.deleteExpense);
 
 export = expense;
