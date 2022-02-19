@@ -3,7 +3,11 @@ import { Types } from "mongoose";
 import Expense, { IExpense } from "../models/Expense";
 import User from "../models/User";
 
-const user = async (req: Request, res: Response, next: NextFunction) => {
+const getUserExpenses = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const expenses = await Expense.find({ user: req.user.id });
 
@@ -15,7 +19,7 @@ const user = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const expense = async (req: Request, res: Response, next: NextFunction) => {
+const getExpense = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
 
   try {
@@ -44,7 +48,7 @@ const expense = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const add = async (req: Request, res: Response, next: NextFunction) => {
+const addExpense = async (req: Request, res: Response, next: NextFunction) => {
   const {
     date,
     income,
@@ -176,4 +180,10 @@ const deleteExpense = async (
   }
 };
 
-export default { user, expense, add, updateExpense, deleteExpense };
+export default {
+  getUserExpenses,
+  getExpense,
+  addExpense,
+  updateExpense,
+  deleteExpense,
+};

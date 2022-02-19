@@ -4,9 +4,14 @@ import expenseController from "../../controllers/expense";
 import validator from "../../middleware/validator";
 const expense = Router();
 
-expense.get("/user", auth, expenseController.user);
-expense.get("/:id", auth, expenseController.expense);
-expense.post("/add", auth, validator.validateExpense, expenseController.add);
+expense.get("/user", auth, expenseController.getUserExpenses);
+expense.get("/:id", auth, expenseController.getExpense);
+expense.post(
+  "/add",
+  auth,
+  validator.validateExpense,
+  expenseController.addExpense
+);
 expense.put(
   "/:id",
   auth,

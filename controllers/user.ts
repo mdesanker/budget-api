@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../models/User";
 
-const current = async (req: Request, res: Response, next: NextFunction) => {
+const getCurrentUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     // Get user
     const user = await User.findById(req.user.id).select("-password");
@@ -14,7 +18,7 @@ const current = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const user = async (req: Request, res: Response, next: NextFunction) => {
+const getUser = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
 
   try {
@@ -33,7 +37,7 @@ const user = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const remove = async (req: Request, res: Response, next: NextFunction) => {
+const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
 
   try {
@@ -64,4 +68,4 @@ const remove = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export default { current, user, remove };
+export default { getCurrentUser, getUser, deleteUser };
