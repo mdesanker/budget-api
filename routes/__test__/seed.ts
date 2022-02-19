@@ -92,6 +92,7 @@ const generateJohnExpenses = () => {
 // TRANSACTIONS
 const generateJaneTransaction = () => {
   const transaction = new Transaction<ITransaction>({
+    _id: "6210cac500a322b6438c589a",
     user: new Types.ObjectId("620f8197b39ee93778ce738b"), // Jane
     description: "Friday night dinner",
     merchant: "Kroger",
@@ -104,6 +105,7 @@ const generateJaneTransaction = () => {
 
 const generateJohnTransaction = () => {
   const transaction = new Transaction<ITransaction>({
+    _id: "6210cac500a322b6438c589b",
     user: new Types.ObjectId("620f8197b39ee93778ce738c"), // John
     description: "Monthly phone bill",
     merchant: "AT&T",

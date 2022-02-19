@@ -21,6 +21,7 @@ const categoryEnum = [
 ];
 
 export interface ITransaction {
+  _id?: string;
   user: Types.ObjectId;
   description: string;
   merchant: string;
