@@ -112,6 +112,11 @@ const addTransaction = async (
 
     await transaction.save();
 
+    await Transaction.populate(transaction, {
+      path: "user",
+      select: "-password",
+    });
+
     res.status(201).json(transaction);
   } catch (err: unknown) {
     if (err instanceof Error) {

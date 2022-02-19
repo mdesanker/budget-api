@@ -154,7 +154,7 @@ describe("POST /transaction/add", () => {
       .set("x-auth-token", janeToken);
 
     expect(res.statusCode).toEqual(201);
-    expect(res.body.user).toEqual(janeId);
+    expect(res.body.user._id).toEqual(janeId);
     expect(res.body).toHaveProperty("description");
     expect(res.body.amount).toEqual(215);
   });
