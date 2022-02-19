@@ -138,3 +138,56 @@ describe("GET /transaction/user/:days", () => {
     expect(res.body.errors[0].msg).toEqual("Invalid time period");
   });
 });
+
+// POST ROUTES
+describe("POST /transaction/add", () => {
+  it("return new transaction", async () => {
+    const res = await request(app)
+      .post("/transaction/add")
+      .send({
+        description: "Babysitting",
+        merchant: "Julia",
+        amount: 215,
+        category: "Professional Services",
+        date: new Date(2021, 9, 15),
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.user._id).toEqual(janeId);
+    expect(res.body).toHaveProperty("description");
+    expect(res.body.amount).toEqual(215);
+  });
+
+  it("return new string submitted for amount", async () => {
+    const res = await request(app)
+      .post("/transaction/add")
+      .send({
+        description: "Babysitting",
+        merchant: "Julia",
+        amount: "215",
+        category: "Professional Services",
+        date: new Date(2021, 9, 15),
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(422);
+    expect(res.body.errors[0].msg).toEqual("Amount must be a number");
+  });
+
+  it("return error for missing field", async () => {
+    const res = await request(app)
+      .post("/transaction/add")
+      .send({
+        description: "",
+        merchant: "Julia",
+        amount: 215,
+        category: "Professional Services",
+        date: new Date(2021, 9, 15),
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(422);
+    expect(res.body.errors[0].msg).toEqual("Description is required");
+  });
+});
