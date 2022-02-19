@@ -119,4 +119,22 @@ describe("GET /transaction/user/:days", () => {
     expect(res.body.length).toEqual(3);
     expect(res.body[0].user).toEqual(janeId);
   });
+
+  it("return error for invalid number entry", async () => {
+    const res = await request(app)
+      .get(`/transaction/user/-9`)
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(422);
+    expect(res.body.errors[0].msg).toEqual("Invalid time period");
+  });
+
+  it("return error for invalid letter entry", async () => {
+    const res = await request(app)
+      .get(`/transaction/user/abc9`)
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(422);
+    expect(res.body.errors[0].msg).toEqual("Invalid time period");
+  });
 });

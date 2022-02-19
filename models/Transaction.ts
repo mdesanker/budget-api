@@ -43,7 +43,7 @@ export interface ITransaction {
     | "Professional Services"
     | "Shopping"
     | "Travel";
-  date?: DateTime;
+  date?: Date;
 }
 
 const TransactionSchema = new Schema<ITransaction>({
@@ -52,7 +52,7 @@ const TransactionSchema = new Schema<ITransaction>({
   merchant: { type: String, required: true },
   amount: { type: Number, required: true },
   category: { type: String, enum: categoryEnum, required: true },
-  date: { type: Date, default: DateTime.now },
+  date: { type: Date, default: Date.now },
 });
 
 export default model("Transaction", TransactionSchema);

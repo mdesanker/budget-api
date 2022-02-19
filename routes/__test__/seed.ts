@@ -99,7 +99,7 @@ const generateJaneTransaction = () => {
     merchant: "Kroger",
     amount: -75,
     category: "Groceries",
-    date: DateTime.now(),
+    date: new Date(),
   });
 
   transactions.push(transaction);
@@ -113,7 +113,7 @@ const generateJohnTransaction = () => {
     merchant: "AT&T",
     amount: -45,
     category: "Bills & Utilities",
-    date: DateTime.now(),
+    date: new Date(),
   });
 
   transactions.push(transaction);
@@ -127,7 +127,7 @@ const generateWeekTransaction = () => {
     merchant: faker.company.companyName(),
     amount: -faker.commerce.price(),
     category: "Groceries",
-    date: DateTime.fromISO("2022-02-17T08:30:00.494Z"),
+    date: new Date("2022-02-17T08:30:00"),
   });
 
   transactions.push(transaction);
@@ -141,7 +141,7 @@ const generateMonthTransaction = () => {
     merchant: faker.company.companyName(),
     amount: -faker.commerce.price(),
     category: "Groceries",
-    date: DateTime.fromISO("2022-02-01T08:30:00.494Z"),
+    date: new Date("2022-02-01T08:30:00"),
   });
 
   transactions.push(transaction);
@@ -155,7 +155,7 @@ const generateYearTransaction = () => {
     merchant: faker.company.companyName(),
     amount: -faker.commerce.price(),
     category: "Groceries",
-    date: DateTime.fromISO("2021-11-12T08:30:00.494Z"),
+    date: new Date("2021-11-12T08:30:00"),
   });
 
   transactions.push(transaction);

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { DateTime } from "luxon";
 import Transaction from "../models/Transaction";
 import User from "../models/User";
 
@@ -8,7 +9,9 @@ const allUserTransactions = async (
   next: NextFunction
 ) => {
   try {
-    const transations = await Transaction.find({ user: req.user.id });
+    const transations = await Transaction.find({ user: req.user.id }).sort({
+      date: "desc",
+    });
 
     res.json(transations);
   } catch (err: unknown) {
@@ -56,4 +59,40 @@ const getTransaction = async (
   }
 };
 
-export default { allUserTransactions, getTransaction };
+const getUserTransactionsTimePeriod = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { days } = req.params;
+
+  const isNum = parseInt(days);
+
+  if (!isNum || isNum <= 0) {
+    return res.status(422).json({ errors: [{ msg: "Invalid time period" }] });
+  }
+
+  try {
+    const now: Date = new Date();
+
+    const transations = await Transaction.find({
+      user: req.user.id,
+      date: {
+        $gte: new Date(now.getTime() - 1000 * 60 * 60 * 24 * parseInt(days)),
+        $lt: new Date(),
+      },
+    }).sort({ date: "desc" });
+
+    res.json(transations);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      res.status(500).send("Server error");
+    }
+  }
+};
+
+export default {
+  allUserTransactions,
+  getTransaction,
+  getUserTransactionsTimePeriod,
+};
