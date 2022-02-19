@@ -16,7 +16,7 @@ export interface IExpense {
 
 const ExpenseSchema = new Schema<IExpense>({
   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  date: { type: Date, default: DateTime.now },
+  date: { type: Date, default: Date.now },
   income: [
     {
       name: { type: String },

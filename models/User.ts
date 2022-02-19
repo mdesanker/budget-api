@@ -16,7 +16,7 @@ const UserSchema = new Schema<IUser>({
   },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minlength: 6 },
-  date: { type: Date, default: DateTime.now },
+  date: { type: Date, default: Date.now },
 });
 
 export default model("User", UserSchema);
