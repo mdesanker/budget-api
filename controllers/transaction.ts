@@ -48,7 +48,6 @@ const getTransaction = async (
     }
 
     // Return transaction
-    console.log(transaction);
     res.json(transaction);
   } catch (err: unknown) {
     if (err instanceof Error) {

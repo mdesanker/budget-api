@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 import User, { IUser } from "../../models/User";
 import Expense, { IExpense } from "../../models/Expense";
 import Transaction, { ITransaction } from "../../models/Transaction";
+import { DateTime } from "luxon";
 
 const users: any[] = [];
 const expenses: any[] = [];
@@ -98,6 +99,7 @@ const generateJaneTransaction = () => {
     merchant: "Kroger",
     amount: -75,
     category: "Groceries",
+    date: DateTime.now(),
   });
 
   transactions.push(transaction);
@@ -111,6 +113,49 @@ const generateJohnTransaction = () => {
     merchant: "AT&T",
     amount: -45,
     category: "Bills & Utilities",
+    date: DateTime.now(),
+  });
+
+  transactions.push(transaction);
+};
+
+const generateWeekTransaction = () => {
+  const transaction = new Transaction<ITransaction>({
+    _id: "6210cac500a322b6438c589c",
+    user: new Types.ObjectId("620f8197b39ee93778ce738b"), // Jane
+    description: faker.commerce.productName(),
+    merchant: faker.company.companyName(),
+    amount: -faker.commerce.price(),
+    category: "Groceries",
+    date: DateTime.fromISO("2022-02-17T08:30:00.494Z"),
+  });
+
+  transactions.push(transaction);
+};
+
+const generateMonthTransaction = () => {
+  const transaction = new Transaction<ITransaction>({
+    _id: "6210cac500a322b6438c589d",
+    user: new Types.ObjectId("620f8197b39ee93778ce738b"), // Jane
+    description: faker.commerce.productName(),
+    merchant: faker.company.companyName(),
+    amount: -faker.commerce.price(),
+    category: "Groceries",
+    date: DateTime.fromISO("2022-02-01T08:30:00.494Z"),
+  });
+
+  transactions.push(transaction);
+};
+
+const generateYearTransaction = () => {
+  const transaction = new Transaction<ITransaction>({
+    _id: "6210cac500a322b6438c589e",
+    user: new Types.ObjectId("620f8197b39ee93778ce738b"), // Jane
+    description: faker.commerce.productName(),
+    merchant: faker.company.companyName(),
+    amount: -faker.commerce.price(),
+    category: "Groceries",
+    date: DateTime.fromISO("2021-11-12T08:30:00.494Z"),
   });
 
   transactions.push(transaction);
@@ -126,6 +171,9 @@ const seedDB = async () => {
 
   generateJaneTransaction();
   generateJohnTransaction();
+  generateWeekTransaction();
+  generateMonthTransaction();
+  generateYearTransaction();
 
   for (let user of users) {
     try {

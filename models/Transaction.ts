@@ -43,7 +43,7 @@ export interface ITransaction {
     | "Professional Services"
     | "Shopping"
     | "Travel";
-  date?: Date;
+  date?: DateTime;
 }
 
 const TransactionSchema = new Schema<ITransaction>({
