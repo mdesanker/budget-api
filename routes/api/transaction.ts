@@ -17,5 +17,11 @@ transaction.post(
   validator.validateTransaction,
   transactionController.addTransaction
 );
+transaction.put(
+  "/edit/:id",
+  auth,
+  validator.validateTransaction,
+  transactionController.editTransaction
+);
 
 export = transaction;

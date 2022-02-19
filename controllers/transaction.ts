@@ -120,9 +120,66 @@ const addTransaction = async (
   }
 };
 
+const editTransaction = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  try {
+    // Check transaction id valid
+    const transaction = await Transaction.findById(id).populate(
+      "user",
+      "-password"
+    );
+
+    if (!transaction) {
+      return res
+        .status(404)
+        .json({ errors: [{ msg: "Invalid transaction id" }] });
+    }
+
+    // Check user is owner
+    const user = await User.findById(req.user.id);
+
+    const isOwner = user?.id === transaction.user.id;
+
+    if (!isOwner) {
+      return res.status(401).json({ errors: [{ msg: "Invalid credentials" }] });
+    }
+
+    // Create new transaction
+    const { description, merchant, amount, category, date } = req.body;
+
+    const replacementTransaction = new Transaction<ITransaction>({
+      _id: id,
+      user: new Types.ObjectId(req.user.id),
+      description,
+      merchant,
+      amount,
+      category,
+      date,
+    });
+
+    const updatedTransaction = await Transaction.findByIdAndUpdate(
+      id,
+      replacementTransaction,
+      { new: true }
+    ).populate("user", "-password");
+
+    res.json(updatedTransaction);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      res.status(500).send("Server error");
+    }
+  }
+};
+
 export default {
   allUserTransactions,
   getTransaction,
   getUserTransactionsTimePeriod,
   addTransaction,
+  editTransaction,
 };
