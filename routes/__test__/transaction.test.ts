@@ -48,6 +48,6 @@ describe("GET /transaction/user", () => {
     expect(res.statusCode).toEqual(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toBeGreaterThan(0);
-    expect(res.body[0]._id).toEqual(janeId);
+    expect(res.body[0].user).toEqual(janeId);
   });
 });
