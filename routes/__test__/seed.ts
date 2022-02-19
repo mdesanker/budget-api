@@ -2,9 +2,11 @@ import faker from "@faker-js/faker";
 import { Types } from "mongoose";
 import User, { IUser } from "../../models/User";
 import Expense, { IExpense } from "../../models/Expense";
+import Transaction, { ITransaction } from "../../models/Transaction";
 
 const users: any[] = [];
 const expenses: any[] = [];
+const transactions: any[] = [];
 
 // USERS
 const generateJane = () => {
@@ -87,6 +89,31 @@ const generateJohnExpenses = () => {
   expenses.push(expense);
 };
 
+// TRANSACTIONS
+const generateJaneTransaction = () => {
+  const transaction = new Transaction<ITransaction>({
+    user: new Types.ObjectId("620f8197b39ee93778ce738b"), // Jane
+    description: "Friday night dinner",
+    merchant: "Kroger",
+    amount: -75,
+    category: "Groceries",
+  });
+
+  transactions.push(transaction);
+};
+
+const generateJohnTransaction = () => {
+  const transaction = new Transaction<ITransaction>({
+    user: new Types.ObjectId("620f8197b39ee93778ce738c"), // John
+    description: "Monthly phone bill",
+    merchant: "AT&T",
+    amount: -45,
+    category: "Bills & Utilities",
+  });
+
+  transactions.push(transaction);
+};
+
 // SEED DB
 const seedDB = async () => {
   generateJane();
@@ -94,6 +121,9 @@ const seedDB = async () => {
 
   generateJaneExpenses();
   generateJohnExpenses();
+
+  generateJaneTransaction();
+  generateJohnTransaction();
 
   for (let user of users) {
     try {
@@ -111,8 +141,17 @@ const seedDB = async () => {
     }
   }
 
+  for (let transaction of transactions) {
+    try {
+      await transaction.save();
+    } catch (err) {
+      err;
+    }
+  }
+
   // console.log(users);
   // console.log(expenses);
+  // console.log(transactions);
   return;
 };
 
