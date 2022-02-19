@@ -85,3 +85,38 @@ describe("GET /transaction/:id", () => {
     expect(res.body.errors[0].msg).toEqual("Invalid credentials");
   });
 });
+
+describe("GET /transaction/user/:days", () => {
+  it("return user transactions for today", async () => {
+    const res = await request(app)
+      .get(`/transaction/user/1`)
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toEqual(1);
+    expect(res.body[0].user).toEqual(janeId);
+  });
+
+  it("return user transactions previous week", async () => {
+    const res = await request(app)
+      .get(`/transaction/user/7`)
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toEqual(2);
+    expect(res.body[0].user).toEqual(janeId);
+  });
+
+  it("return user transactions previous month", async () => {
+    const res = await request(app)
+      .get(`/transaction/user/30`)
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toEqual(3);
+    expect(res.body[0].user).toEqual(janeId);
+  });
+});
