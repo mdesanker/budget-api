@@ -51,7 +51,7 @@ describe("GET /transaction/user", () => {
     expect(res.statusCode).toEqual(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toBeGreaterThan(0);
-    expect(res.body[0].user).toEqual(janeId);
+    expect(res.body[0].user._id).toEqual(janeId);
   });
 });
 
@@ -95,7 +95,7 @@ describe("GET /transaction/user/:days", () => {
     expect(res.statusCode).toEqual(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toEqual(1);
-    expect(res.body[0].user).toEqual(janeId);
+    expect(res.body[0].user._id).toEqual(janeId);
   });
 
   it("return user transactions previous week", async () => {
@@ -106,7 +106,7 @@ describe("GET /transaction/user/:days", () => {
     expect(res.statusCode).toEqual(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toEqual(2);
-    expect(res.body[0].user).toEqual(janeId);
+    expect(res.body[0].user._id).toEqual(janeId);
   });
 
   it("return user transactions previous month", async () => {
@@ -117,7 +117,7 @@ describe("GET /transaction/user/:days", () => {
     expect(res.statusCode).toEqual(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toEqual(3);
-    expect(res.body[0].user).toEqual(janeId);
+    expect(res.body[0].user._id).toEqual(janeId);
   });
 
   it("return error for invalid number entry", async () => {

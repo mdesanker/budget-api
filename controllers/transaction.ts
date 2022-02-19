@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { Types } from "mongoose";
-import { DateTime } from "luxon";
 import Transaction, { ITransaction } from "../models/Transaction";
 import User from "../models/User";
 
@@ -10,9 +9,11 @@ const allUserTransactions = async (
   next: NextFunction
 ) => {
   try {
-    const transactions = await Transaction.find({ user: req.user.id }).sort({
-      date: "desc",
-    });
+    const transactions = await Transaction.find({ user: req.user.id })
+      .populate("user")
+      .sort({
+        date: "desc",
+      });
 
     res.json(transactions);
   } catch (err: unknown) {
@@ -31,10 +32,7 @@ const getTransaction = async (
 
   try {
     // Check id is valid
-    const transaction = await Transaction.findById(id).populate(
-      "user",
-      "-password"
-    );
+    const transaction = await Transaction.findById(id).populate("user");
 
     if (!transaction) {
       return res
@@ -82,7 +80,9 @@ const getUserTransactionsTimePeriod = async (
         $gte: new Date(now.getTime() - 1000 * 60 * 60 * 24 * parseInt(days)),
         $lt: new Date(),
       },
-    }).sort({ date: "desc" });
+    })
+      .populate("user")
+      .sort({ date: "desc" });
 
     res.json(transactions);
   } catch (err: unknown) {
@@ -114,7 +114,6 @@ const addTransaction = async (
 
     await Transaction.populate(transaction, {
       path: "user",
-      select: "-password",
     });
 
     res.status(201).json(transaction);
@@ -171,7 +170,7 @@ const editTransaction = async (
       id,
       replacementTransaction,
       { new: true }
-    ).populate("user", "-password");
+    ).populate("user");
 
     res.json(updatedTransaction);
   } catch (err: unknown) {
