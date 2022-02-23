@@ -94,7 +94,7 @@ describe("GET /transaction/user/:days", () => {
 
     expect(res.statusCode).toEqual(200);
     expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toEqual(1);
+    expect(res.body.length).toEqual(2);
     expect(res.body[0].user._id).toEqual(janeId);
   });
 
@@ -105,7 +105,7 @@ describe("GET /transaction/user/:days", () => {
 
     expect(res.statusCode).toEqual(200);
     expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toEqual(2);
+    expect(res.body.length).toEqual(3);
     expect(res.body[0].user._id).toEqual(janeId);
   });
 
@@ -116,7 +116,7 @@ describe("GET /transaction/user/:days", () => {
 
     expect(res.statusCode).toEqual(200);
     expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toEqual(3);
+    expect(res.body.length).toEqual(4);
     expect(res.body[0].user._id).toEqual(janeId);
   });
 
@@ -141,13 +141,14 @@ describe("GET /transaction/user/:days", () => {
 
 // POST ROUTES
 describe("POST /transaction/add", () => {
-  it("return new transaction", async () => {
+  it("return new expense transaction", async () => {
     const res = await request(app)
       .post("/transaction/add")
       .send({
         description: "Babysitting",
         merchant: "Julia",
         amount: 215,
+        type: "expense",
         category: "Professional Services",
         date: new Date(2021, 9, 15),
       })
@@ -157,6 +158,27 @@ describe("POST /transaction/add", () => {
     expect(res.body.user._id).toEqual(janeId);
     expect(res.body).toHaveProperty("description");
     expect(res.body.amount).toEqual(215);
+    expect(res.body.type).toEqual("expense");
+  });
+
+  it("return new earning transaction", async () => {
+    const res = await request(app)
+      .post("/transaction/add")
+      .send({
+        description: "Sold shirt",
+        merchant: "Rob",
+        amount: 12,
+        type: "earning",
+        category: "Personal",
+        date: new Date(2021, 11, 2),
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(201);
+    expect(res.body.user._id).toEqual(janeId);
+    expect(res.body).toHaveProperty("description");
+    expect(res.body.amount).toEqual(12);
+    expect(res.body.type).toEqual("earning");
   });
 
   it("return error for string submitted for amount", async () => {
@@ -166,6 +188,7 @@ describe("POST /transaction/add", () => {
         description: "Babysitting",
         merchant: "Julia",
         amount: "a215",
+        type: "expense",
         category: "Professional Services",
         date: new Date(2021, 9, 15),
       })
@@ -182,6 +205,7 @@ describe("POST /transaction/add", () => {
         description: "",
         merchant: "Julia",
         amount: 215,
+        type: "expense",
         category: "Professional Services",
         date: new Date(2021, 9, 15),
       })
@@ -201,6 +225,7 @@ describe("PUT /transaction/edit/:id", () => {
         description: "Daycare",
         merchant: "City Montessori",
         amount: 325,
+        type: "expense",
         category: "Professional Services",
         date: new Date(2021, 9, 23),
       })
@@ -209,6 +234,26 @@ describe("PUT /transaction/edit/:id", () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body._id).toEqual(janeTransactionId);
     expect(res.body.description).toEqual("Daycare");
+    expect(res.body.type).toEqual("expense");
+  });
+
+  it("return earning transaction", async () => {
+    const res = await request(app)
+      .put(`/transaction/edit/${janeTransactionId}`)
+      .send({
+        description: "Bonus",
+        merchant: "Job",
+        amount: 1200,
+        type: "earning",
+        category: "Personal",
+        date: new Date(2021, 12, 25),
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body._id).toEqual(janeTransactionId);
+    expect(res.body.description).toEqual("Bonus");
+    expect(res.body.type).toEqual("earning");
   });
 
   it("return error for missing field", async () => {
@@ -218,6 +263,7 @@ describe("PUT /transaction/edit/:id", () => {
         description: "",
         merchant: "Best Buy",
         amount: 325,
+        type: "expense",
         category: "Shopping",
         date: new Date(2022, 1, 15),
       })
@@ -234,6 +280,7 @@ describe("PUT /transaction/edit/:id", () => {
         description: "Hijack",
         merchant: "Jane Inc",
         amount: 5000,
+        type: "expense",
         category: "Personal",
         date: new Date(2022, 2, 15),
       })
@@ -250,6 +297,7 @@ describe("PUT /transaction/edit/:id", () => {
         description: "InVaLiD iD",
         merchant: "Uh Oh Inc",
         amount: 666,
+        type: "expense",
         category: "Personal",
         date: new Date(2022, 2, 15),
       })

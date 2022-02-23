@@ -97,8 +97,24 @@ const generateJaneTransaction = () => {
     user: new Types.ObjectId("620f8197b39ee93778ce738b"), // Jane
     description: "Friday night dinner",
     merchant: "Kroger",
-    amount: -75,
+    amount: 75,
+    type: "expense",
     category: "Groceries",
+    date: new Date(),
+  });
+
+  transactions.push(transaction);
+};
+
+const generateJaneEarningTransaction = () => {
+  const transaction = new Transaction<ITransaction>({
+    _id: "6210cac500a322b6438c588a",
+    user: new Types.ObjectId("620f8197b39ee93778ce738b"), // Jane
+    description: "Dinner",
+    merchant: "Amelia",
+    amount: 25,
+    type: "earning",
+    category: "Food & Drink",
     date: new Date(),
   });
 
@@ -111,7 +127,8 @@ const generateJohnTransaction = () => {
     user: new Types.ObjectId("620f8197b39ee93778ce738c"), // John
     description: "Monthly phone bill",
     merchant: "AT&T",
-    amount: -45,
+    amount: 45,
+    type: "expense",
     category: "Bills & Utilities",
     date: new Date(),
   });
@@ -125,7 +142,8 @@ const generateWeekTransaction = () => {
     user: new Types.ObjectId("620f8197b39ee93778ce738b"), // Jane
     description: faker.commerce.productName(),
     merchant: faker.company.companyName(),
-    amount: -faker.commerce.price(),
+    amount: +faker.commerce.price(),
+    type: "expense",
     category: "Groceries",
     date: new Date("2022-02-17T08:30:00"),
   });
@@ -139,7 +157,8 @@ const generateMonthTransaction = () => {
     user: new Types.ObjectId("620f8197b39ee93778ce738b"), // Jane
     description: faker.commerce.productName(),
     merchant: faker.company.companyName(),
-    amount: -faker.commerce.price(),
+    amount: +faker.commerce.price(),
+    type: "expense",
     category: "Groceries",
     date: new Date("2022-02-01T08:30:00"),
   });
@@ -153,7 +172,8 @@ const generateYearTransaction = () => {
     user: new Types.ObjectId("620f8197b39ee93778ce738b"), // Jane
     description: faker.commerce.productName(),
     merchant: faker.company.companyName(),
-    amount: -faker.commerce.price(),
+    amount: +faker.commerce.price(),
+    type: "expense",
     category: "Groceries",
     date: new Date("2021-11-12T08:30:00"),
   });
@@ -170,6 +190,7 @@ const seedDB = async () => {
   generateJohnExpenses();
 
   generateJaneTransaction();
+  generateJaneEarningTransaction();
   generateJohnTransaction();
   generateWeekTransaction();
   generateMonthTransaction();
@@ -201,7 +222,7 @@ const seedDB = async () => {
 
   // console.log(users);
   // console.log(expenses);
-  // console.log(transactions);
+  console.log(transactions);
   return;
 };
 
