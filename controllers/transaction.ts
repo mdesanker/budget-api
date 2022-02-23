@@ -98,7 +98,7 @@ const addTransaction = async (
   next: NextFunction
 ) => {
   try {
-    const { description, merchant, amount, category, date } = req.body;
+    const { description, merchant, amount, type, category, date } = req.body;
 
     // Create new transaction
     const transaction = new Transaction<ITransaction>({
@@ -106,6 +106,7 @@ const addTransaction = async (
       description,
       merchant,
       amount,
+      type,
       category,
       date,
     });
@@ -151,7 +152,9 @@ const editTransaction = async (
     }
 
     // Create new transaction
-    const { description, merchant, amount, category, date } = req.body;
+    const { description, merchant, amount, type, category, date } = req.body;
+
+    console.log(req.body);
 
     const replacementTransaction = new Transaction<ITransaction>({
       _id: id,
@@ -159,6 +162,7 @@ const editTransaction = async (
       description,
       merchant,
       amount,
+      type,
       category,
       date,
     });

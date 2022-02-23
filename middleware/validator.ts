@@ -116,6 +116,7 @@ const validateTransaction = [
     .notEmpty()
     .isNumeric()
     .withMessage("Amount must be a number"),
+  check("type", "Type is required").trim().notEmpty(),
   check("category", "Category is required").trim().notEmpty(),
   check("date").isISO8601(),
 

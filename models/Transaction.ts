@@ -1,5 +1,4 @@
 import { Schema, Types, model } from "mongoose";
-import { DateTime } from "luxon";
 
 const categoryEnum = [
   "Automotive",
@@ -26,6 +25,7 @@ export interface ITransaction {
   description: string;
   merchant: string;
   amount: number;
+  type: "expense" | "earning";
   category:
     | "Automotive"
     | "Bills & Utilities"
@@ -51,6 +51,7 @@ const TransactionSchema = new Schema<ITransaction>({
   description: { type: String, required: true },
   merchant: { type: String, required: true },
   amount: { type: Number, required: true },
+  type: { type: String, enum: ["expense", "earning"], required: true },
   category: { type: String, enum: categoryEnum, required: true },
   date: { type: Date, default: Date.now },
 });
