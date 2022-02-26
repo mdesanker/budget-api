@@ -46,9 +46,11 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
     // console.log(user);
 
     // Check new email is available
+    const emailChange = email !== user?.email;
+
     const emailExisting = await User.findOne({ email });
 
-    if (emailExisting) {
+    if (emailExisting && emailChange) {
       return res
         .status(409)
         .json({ errors: [{ msg: "Email already in use" }] });
