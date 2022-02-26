@@ -86,6 +86,7 @@ describe("PUT /user/update", () => {
     expect(res.body.name.firstName).toEqual("Janet");
     expect(res.body.email).toEqual("janet@gmail.com");
     expect(res.body._id).toEqual(janeId);
+    expect(res.body).not.toHaveProperty("password");
   });
 
   it("return error for empty field", async () => {

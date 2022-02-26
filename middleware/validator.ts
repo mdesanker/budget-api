@@ -46,6 +46,24 @@ const loginUser = [
   },
 ];
 
+const updateUser = [
+  // Validate and sanitize input
+  check("firstName", "First name is required").trim().notEmpty().escape(),
+  check("lastName", "Last name is required").trim().notEmpty().escape(),
+  check("email", "Email is required").trim().notEmpty().isEmail(),
+
+  // Error handling
+  (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
+    next();
+  },
+];
+
 const validateExpense = [
   // Validate and sanitize input
   check("date").isISO8601(),
@@ -135,6 +153,7 @@ const validateTransaction = [
 export default {
   registerUser,
   loginUser,
+  updateUser,
   validateExpense,
   validateTransaction,
 };

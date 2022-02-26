@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import User from "../models/User";
+import User, { IUser } from "../models/User";
 
 const getCurrentUser = async (
   req: Request,
@@ -30,6 +30,47 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     res.json(user);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      res.status(500).send("Server error");
+    }
+  }
+};
+
+const updateUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { firstName, lastName, email } = req.body;
+
+    // Get current user
+    const user = await User.findById(req.user.id).select("+password");
+    // console.log(user);
+
+    // Check new email is available
+    const emailExisting = await User.findOne({ email });
+
+    if (emailExisting) {
+      return res
+        .status(409)
+        .json({ errors: [{ msg: "Email already in use" }] });
+    }
+
+    // Update user
+    const update = new User<IUser>({
+      _id: req.user.id,
+      name: {
+        firstName,
+        lastName,
+      },
+      email,
+      password: user?.password!,
+      date: user?.date,
+    });
+
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, update, {
+      new: true,
+    }).select("-password");
+
+    res.json(updatedUser);
   } catch (err: unknown) {
     if (err instanceof Error) {
       res.status(500).send("Server error");
@@ -68,4 +109,4 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export default { getCurrentUser, getUser, deleteUser };
+export default { getCurrentUser, getUser, updateUser, deleteUser };

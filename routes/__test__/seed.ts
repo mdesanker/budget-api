@@ -222,7 +222,7 @@ const seedDB = async () => {
 
   // console.log(users);
   // console.log(expenses);
-  console.log(transactions);
+  // console.log(transactions);
   return;
 };
 
