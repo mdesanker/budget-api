@@ -58,6 +58,31 @@ const getTransaction = async (
   }
 };
 
+const adminGetTransaction = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  try {
+    // Check exists
+    const transaction = await Transaction.findById(id).populate("user");
+
+    if (!transaction) {
+      return res
+        .status(404)
+        .json({ errors: [{ msg: "Invalid transaction id" }] });
+    }
+
+    res.json(transaction);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      res.status(500).send("Server error");
+    }
+  }
+};
+
 const getUserTransactionsTimePeriod = async (
   req: Request,
   res: Response,
@@ -221,6 +246,7 @@ const deleteTransaction = async (
 export default {
   allUserTransactions,
   getTransaction,
+  adminGetTransaction,
   getUserTransactionsTimePeriod,
   addTransaction,
   editTransaction,

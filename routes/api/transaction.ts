@@ -6,6 +6,7 @@ const transaction = Router();
 
 transaction.get("/user", auth, transactionController.allUserTransactions);
 transaction.get("/:id", auth, transactionController.getTransaction);
+transaction.get("/admin/:id", transactionController.adminGetTransaction);
 transaction.get(
   "/user/:days",
   auth,
