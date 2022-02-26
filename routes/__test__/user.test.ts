@@ -11,6 +11,7 @@ const janeId: string = "620f8197b39ee93778ce738b";
 const johnId: string = "620f8197b39ee93778ce738c";
 const invalidUserId: string = "620f8197b39ee93778c00000";
 const johnTransactionId: string = "6210cac500a322b6438c589b";
+const johnExpenseId: string = "620ff22cc1e1d3cda631c3df";
 
 // TEST SETUP
 beforeAll(async () => {
@@ -167,11 +168,15 @@ describe("DELETE /user/:id", () => {
       `/transaction/admin/${johnTransactionId}`
     );
 
+    const expense = await request(app).get(`/expense/admin/${johnExpenseId}`);
+
     expect(res.statusCode).toEqual(200);
     expect(res.body.msg).toEqual("User deleted");
     expect(check.statusCode).toEqual(404);
     expect(check.body.errors[0].msg).toEqual("Invalid credentials");
     expect(transaction.statusCode).toEqual(404);
     expect(transaction.body.errors[0].msg).toEqual("Invalid transaction id");
+    expect(expense.statusCode).toEqual(404);
+    expect(expense.body.errors[0].msg).toEqual("Invalid transaction id");
   });
 });
