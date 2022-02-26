@@ -177,6 +177,6 @@ describe("DELETE /user/:id", () => {
     expect(transaction.statusCode).toEqual(404);
     expect(transaction.body.errors[0].msg).toEqual("Invalid transaction id");
     expect(expense.statusCode).toEqual(404);
-    expect(expense.body.errors[0].msg).toEqual("Invalid transaction id");
+    expect(expense.body.errors[0].msg).toEqual("Invalid expense id");
   });
 });

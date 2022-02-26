@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction } from "express";
+import Expense from "../models/Expense";
+import Transaction from "../models/Transaction";
 import User, { IUser } from "../models/User";
 
 const getCurrentUser = async (
@@ -99,6 +101,12 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
     if (!isMatch) {
       return res.status(401).json({ errors: [{ msg: "Invalid credentials" }] });
     }
+
+    // Delete user transactions
+    await Transaction.deleteMany({ user: req.user.id });
+
+    // Delete user expenses
+    await Expense.deleteMany({ user: req.user.id });
 
     // Delete user
     await User.findByIdAndDelete(id);
