@@ -87,6 +87,22 @@ describe("GET /expense/:id", () => {
   });
 });
 
+describe("GET /expense/admin/:id", () => {
+  it("return expense", async () => {
+    const res = await request(app).get(`/expense/admin/${janeExpenseId}`);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.user._id).toEqual(janeId);
+  });
+
+  it("return error for invalid id", async () => {
+    const res = await request(app).get(`/expense/admin/${invalidExpenseId}`);
+
+    expect(res.statusCode).toEqual(404);
+    expect(res.body.errors[0].msg).toEqual("Invalid expense id");
+  });
+});
+
 // POST ROUTES
 describe("POST /expense/add", () => {
   it("return new expense", async () => {

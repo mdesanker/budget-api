@@ -6,6 +6,7 @@ const expense = Router();
 
 expense.get("/user", auth, expenseController.getUserExpenses);
 expense.get("/:id", auth, expenseController.getExpense);
+expense.get("/admin/:id", expenseController.adminGetExpense);
 expense.post(
   "/add",
   auth,

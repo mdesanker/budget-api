@@ -48,6 +48,29 @@ const getExpense = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const adminGetExpense = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  try {
+    // Check valid id
+    const expense = await Expense.findById(id).populate("user");
+
+    if (!expense) {
+      return res.status(404).json({ errors: [{ msg: "Invalid expense id" }] });
+    }
+
+    res.json(expense);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      res.status(500).send("Server error");
+    }
+  }
+};
+
 const addExpense = async (req: Request, res: Response, next: NextFunction) => {
   const {
     date,
@@ -78,7 +101,6 @@ const addExpense = async (req: Request, res: Response, next: NextFunction) => {
 
     await Expense.populate(expense, { path: "user" });
 
-    console.log(expense);
     res.status(201).json(expense);
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -186,6 +208,7 @@ const deleteExpense = async (
 export default {
   getUserExpenses,
   getExpense,
+  adminGetExpense,
   addExpense,
   updateExpense,
   deleteExpense,
