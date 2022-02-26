@@ -89,6 +89,23 @@ describe("PUT /user/update", () => {
     expect(res.body).not.toHaveProperty("password");
   });
 
+  it("return updated user if email doesn't change", async () => {
+    const res = await request(app)
+      .put("/user/update")
+      .send({
+        firstName: "Janetta",
+        lastName: "Smurf",
+        email: "janet@gmail.com",
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.name.firstName).toEqual("Janetta");
+    expect(res.body.email).toEqual("janet@gmail.com");
+    expect(res.body._id).toEqual(janeId);
+    expect(res.body).not.toHaveProperty("password");
+  });
+
   it("return error for empty field", async () => {
     const res = await request(app)
       .put("/user/update")
