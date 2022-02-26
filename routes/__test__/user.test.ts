@@ -70,6 +70,53 @@ describe("GET /user/:id", () => {
   });
 });
 
+// PUT ROUTES
+describe("PUT /user/update", () => {
+  it("return updated user name and email", async () => {
+    const res = await request(app)
+      .put("/user/update")
+      .send({
+        firstName: "Janet",
+        lastName: "Smith",
+        email: "janet@gmail.com",
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.name.firstName).toEqual("Janet");
+    expect(res.body.email).toEqual("janet@gmail.com");
+    expect(res.body._id).toEqual(janeId);
+  });
+
+  it("return error for empty field", async () => {
+    const res = await request(app)
+      .put("/user/update")
+      .send({
+        firstName: "",
+        lastName: "Smith",
+        email: "janet@gmail.com",
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(422);
+    expect(res.body.errors[0].msg).toEqual("First name is required");
+  });
+
+  it("return error for email not unique", async () => {
+    const res = await request(app)
+      .put("/user/update")
+      .send({
+        firstName: "Janet",
+        lastName: "Smith",
+        email: "john@gmail.com",
+      })
+      .set("x-auth-token", janeToken);
+
+    expect(res.statusCode).toEqual(409);
+    expect(res.body.errors[0].msg).toEqual("Email already in use");
+  });
+});
+
 // DELETE ROUTES
 describe("DELETE /user/:id", () => {
   it("return error if invalid id", async () => {
