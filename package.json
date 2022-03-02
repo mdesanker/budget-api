@@ -1,6 +1,9 @@
 {
   "name": "budget-api",
   "version": "1.0.0",
+  "engines": {
+    "node": "14.17.6"
+  },
   "description": "API for budget tracking app",
   "main": "app.ts",
   "scripts": {
