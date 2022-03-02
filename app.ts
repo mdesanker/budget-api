@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
@@ -29,6 +29,10 @@ app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/expense", expenseRouter);
 app.use("/transaction", transactionRouter);
+
+app.get("/", (req: Request, res: Response) =>
+  res.send("REST API for Budget Tracking App")
+);
 
 const PORT = (process.env.PORT as string) || (process.env.DEV_PORT as string);
 
