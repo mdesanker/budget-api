@@ -8,7 +8,7 @@
   "main": "app.ts",
   "scripts": {
     "test": "NODE_ENV=test jest ./src/routes/__test__/user.test.ts --testTimeout=10000 --detectOpenHandles --forceExit",
-    "start": "ts-node ./src/app.ts",
+    "start": "node dist/app.js",
     "postinstall": "tsc",
     "watch-node": "nodemon dist/index.js",
     "watch-ts": "tsc -w",
