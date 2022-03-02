@@ -179,8 +179,6 @@ const editTransaction = async (
     // Create new transaction
     const { description, merchant, amount, type, category, date } = req.body;
 
-    console.log(req.body);
-
     const replacementTransaction = new Transaction<ITransaction>({
       _id: id,
       user: new Types.ObjectId(req.user.id),
