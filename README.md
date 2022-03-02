@@ -1,24 +1,33 @@
 # Budget App API
 
-A tracking app for budget and expenses.
+A tracking app for expenses.
 
-The [Budget App]()
+The [Budget App](https://mdesanker.github.io/budget-frontend)
 
 ## Table of Contents
 
 - [Description](#Description)
-- [How to set up locally](#How-to-set-up-locally)
+- [Motivation](#Motivation)
+- [How to setup locally](#How-to-set-up-locally)
 - [Built with](#Built-with)
-- [Lessons learned](#Lessons-learned)
+  - [Frontend](#Frontend)
+  - [Backend](#Backend)
+- [Challenges](#Challenges)
 - [Links](#Links)
 
 ## Description
 
-This is the API for the [Budget App]().
+This repository is the REST API backend for the [Budget App](https://mdesanker.github.io/budget-frontend).
 
-This app is designed to allow users to track their expenses for different categories, such as housing, food, bills & utilities, and so on to help with budgeting. Users can also track expenses to help them understand where and what their largest expenses are, which can be helpful for developing plans to increase spending.
+This expense tracking app allows users to track expenses with amount, who money was sent to or received from, a description of what the transaction was for, a transaction category, and date of the transaction. The dashboard displays total expenses, and a list of individual transactions over a 7 or 30 day period.
 
-## How to set up locally
+The activity tracker tab shows a break down of transactions day-by-day over the last week, and month-by-month over the last year. Users can also look at their spending in each category over time periods of a week, month, or year.
+
+## Motivation
+
+This app was created as a practice exercise to use TypeScript with React and Express, and use Tailwind CSS.
+
+## How to setup locally
 
 ```bash
 git clone git@github.com:mdesanker/errand-tracker-api.git
@@ -38,7 +47,7 @@ KEY={{JWT key}}
 To run all tests, remove the path. To run tests for a specific file, modify path in `test` script with desired fileName:
 
 ```json
-"test": "cross-env NODE_ENV=test jest ./routes/__test__/user.test.js --testTimeout=10000 --detectOpenHandles --forceExit",
+"test": "cross-env NODE_ENV=test jest ./routes/__test__/<test_filename>.test.ts --testTimeout=10000 --detectOpenHandles --forceExit",
 ```
 
 ```bash
@@ -47,13 +56,34 @@ npm test
 
 ## Built with
 
-- TypeScript
+This app was built with the MERN stack in TypeScript.
+
+### Frontend
+
+- React
+- React Router
+- Redux
+- Axios
+- ChartJS
+- Tailwind CSS
+
+### Backend
+
 - NodeJS
 - ExpressJS
 - JWT Authentication
 - MongoDB/Mongoose
 - supertest
+- MongoMemoryServer
 
-## Lessons learned
+## Backend Challenges
+
+- TypeScript took some getting used to (ongoing), but the ability to type check inputs is very useful.
+
+- Figuring out how to add user id to the request object with declaration merging took quite a while.
+
+- Added routes to track major expense data in snapshots that could be displayed in charts and used to develop a budget plan, but this was not implemented in the frontend.
 
 ## Links
+
+- [Frontend Repository](https://github.com/mdesanker/budget-frontend)
