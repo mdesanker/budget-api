@@ -33,7 +33,7 @@ This app was created as a practice exercise to use TypeScript with React and Exp
 git clone git@github.com:mdesanker/errand-tracker-api.git
 cd errand-tracker-api
 npm install
-npm run serverstart
+npm run dev
 ```
 
 Running this API locally will require you to create a .env file in the root directory with the following variables:
