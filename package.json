@@ -7,7 +7,7 @@
   "description": "API for budget tracking app",
   "main": "app.ts",
   "scripts": {
-    "test": "NODE_ENV=test jest ./src/routes/__test__/user.test.ts --testTimeout=10000 --detectOpenHandles --forceExit",
+    "test": "NODE_ENV=test jest ./src/routes/__test__/transaction.test.ts --testTimeout=10000 --detectOpenHandles --forceExit",
     "start": "node dist/app.js",
     "postinstall": "tsc",
     "watch-node": "nodemon dist/index.js",

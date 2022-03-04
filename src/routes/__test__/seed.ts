@@ -100,7 +100,7 @@ const generateJaneTransaction = () => {
     amount: 75,
     type: "expense",
     category: "Groceries",
-    date: new Date(),
+    date: DateTime.now(),
   });
 
   transactions.push(transaction);
@@ -115,7 +115,7 @@ const generateJaneEarningTransaction = () => {
     amount: 25,
     type: "earning",
     category: "Food & Drink",
-    date: new Date(),
+    date: DateTime.now(),
   });
 
   transactions.push(transaction);
@@ -130,7 +130,7 @@ const generateJohnTransaction = () => {
     amount: 45,
     type: "expense",
     category: "Bills & Utilities",
-    date: new Date(),
+    date: DateTime.now(),
   });
 
   transactions.push(transaction);
@@ -145,7 +145,7 @@ const generateWeekTransaction = () => {
     amount: +faker.commerce.price(),
     type: "expense",
     category: "Groceries",
-    date: new Date("2022-02-17T08:30:00"),
+    date: DateTime.fromISO("2022-02-17T08:30:00"),
   });
 
   transactions.push(transaction);
@@ -160,7 +160,7 @@ const generateMonthTransaction = () => {
     amount: +faker.commerce.price(),
     type: "expense",
     category: "Groceries",
-    date: new Date("2022-02-01T08:30:00"),
+    date: DateTime.fromISO("2022-02-01T08:30:00"),
   });
 
   transactions.push(transaction);
@@ -175,7 +175,7 @@ const generateYearTransaction = () => {
     amount: +faker.commerce.price(),
     type: "expense",
     category: "Groceries",
-    date: new Date("2021-11-12T08:30:00"),
+    date: DateTime.fromISO("2021-11-12T08:30:00"),
   });
 
   transactions.push(transaction);
@@ -222,7 +222,7 @@ const seedDB = async () => {
 
   // console.log(users);
   // console.log(expenses);
-  // console.log(transactions);
+  console.log(transactions);
   return;
 };
 

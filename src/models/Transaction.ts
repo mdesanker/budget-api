@@ -1,4 +1,5 @@
 import { Schema, Types, model } from "mongoose";
+import { DateTime } from "luxon";
 
 export interface ITransaction {
   _id?: string;
@@ -8,7 +9,7 @@ export interface ITransaction {
   amount: number;
   type: "expense" | "earning";
   category: string;
-  date?: Date;
+  date?: DateTime;
 }
 
 const TransactionSchema = new Schema<ITransaction>({
@@ -18,7 +19,7 @@ const TransactionSchema = new Schema<ITransaction>({
   amount: { type: Number, required: true },
   type: { type: String, enum: ["expense", "earning"], required: true },
   category: { type: String, required: true },
-  date: { type: Date, default: Date.now },
+  date: { type: Date, default: DateTime.now },
 });
 
 export default model("Transaction", TransactionSchema);
