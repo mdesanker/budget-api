@@ -78,11 +78,9 @@ This app was built with the MERN stack in TypeScript.
 
 ## Backend Challenges
 
-- TypeScript took some getting used to (ongoing), but the ability to type check inputs is very useful.
+- Adding user id to the request object with declaration merging.
 
-- Figuring out how to add user id to the request object with declaration merging took quite a while.
-
-- Added routes to track major expense data in snapshots that could be displayed in charts and used to develop a budget plan, but this was not implemented in the frontend.
+- The expense routes for tracking major expense data in snapshots that could be displayed in charts and used to develop a budget plan, but this was not implemented in the frontend.
 
 ## Links
 
